@@ -1,6 +1,9 @@
 import express from 'express'  // the web server (???)
 import mongoose from 'mongoose'
 
+// data models
+import Tomadores from './tomadores'
+
 
 // constants
 const PORT = 3000 // the port used by the express server
@@ -12,7 +15,7 @@ const PORT = 3000 // the port used by the express server
 // value = the values for username, password, host name (cluster) correspondingly 
 
 const username = process.env.MONGO_INITDB_ROOT_USERNAME;
-const password = process.env.MONGO_INITDB_ROOT_PASSWORD;
+const password = encodeURIComponent(process.env.MONGO_INITDB_ROOT_PASSWORD);
 const mongohost = process.env.MONGO_HOST;
 
 // this is the connection string that will be used to connect to the database server
@@ -23,15 +26,10 @@ const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
 console.log(`Trying to connect to ${uri}`)
 mongoose.connect(uri)
   .then((stuff) => {
-    console.log(`Connection successful`)
-    console.log(`That's what we got`)
-    for (const [key, value] of Object.entries(stuff)) {
-      console.log(`${key} : ${typeof value}`)
-    }
+    console.log(`Connection successful. Database Version =${stuff.version}`)
+
   })
   .catch((error) => console.log(error))
-  .finally( (coisa)=> {console.log('rr',coisa)})
-console.log(mongoose.connection)
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
