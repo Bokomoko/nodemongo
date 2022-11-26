@@ -20,7 +20,7 @@ const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
 
 
 // connect to the database server
-
+console.log(`Trying to connect to ${uri}`)
 mongoose.connect(uri)
   .then((stuff) => {
     console.log(`Connection successful`)
@@ -29,8 +29,9 @@ mongoose.connect(uri)
       console.log(`${key} : ${typeof value}`)
     }
   })
-  .catch((error) => console.log)
-
+  .catch((error) => console.log(error))
+  .finally( (coisa)=> {console.log('rr',coisa)})
+console.log(mongoose.connection)
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
