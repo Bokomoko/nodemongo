@@ -1,5 +1,9 @@
 import express from 'express'  // the web server (???)
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config() // loads the .env file into process.env
+
 
 
 // constants
@@ -7,12 +11,12 @@ const PORT = 3000 // the port used by the express server
 
 // obtain env variables to create connection string to the Atlas MongoDB cloud database
 // If you're running on your local computer remember to set them on your OS prompt.
-// If you're running on repl.it just set the secrets with 
+// If you're running on repl.it just set the secrets with
 // key = variable name
-// value = the values for username, password, host name (cluster) correspondingly 
+// value = the values for username, password, host name (cluster) correspondingly
 
 const username = process.env.MONGO_INITDB_ROOT_USERNAME;
-const password = process.env.MONGO_INITDB_ROOT_PASSWORD;
+const password = encodeURIComponent(process.env.MONGO_INITDB_ROOT_PASSWORD);
 const mongohost = process.env.MONGO_HOST;
 
 // this is the connection string that will be used to connect to the database server
@@ -23,15 +27,10 @@ const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
 console.log(`Trying to connect to ${uri}`)
 mongoose.connect(uri)
   .then((stuff) => {
-    console.log(`Connection successful`)
-    console.log(`That's what we got`)
-    for (const [key, value] of Object.entries(stuff)) {
-      console.log(`${key} : ${typeof value}`)
-    }
+    console.log(`Connection successful. Database version is ${stuff.version}`)
   })
   .catch((error) => console.log(error))
-  .finally( (coisa)=> {console.log('rr',coisa)})
-console.log(mongoose.connection)
+  .finally((coisa) => { console.log('MongoDB Connection stablished') })
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
@@ -50,7 +49,7 @@ app.get("/",
   // more info on the response data -> https://expressjs.com/pt-br/api.html#res
   (req, res) => {
     // this is the code that will run whenever a get to the page is done
-    // the req.ip contains the IP address of the client. 
+    // the req.ip contains the IP address of the client.
     console.log(`Somebody did a get from IP ${req.ip}`)
     // UNLESS it's been proxied (as is the case with all repl.it pages)
     console.log(`is There any proxy? ${req.get('X-Forwarded-For')}`)
