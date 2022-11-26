@@ -6,7 +6,7 @@ dotenv.config() // loads the .env file into process.env
 
 
 // data models
-import Tomadores from './tomadores'
+import Tomadores from './models/tomadores.js'
 
 
 // constants
