@@ -5,6 +5,9 @@ import dotenv from 'dotenv'
 dotenv.config() // loads the .env file into process.env
 
 
+// data models
+import Tomadores from './tomadores'
+
 
 // constants
 const PORT = 3000 // the port used by the express server
@@ -27,10 +30,10 @@ const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
 console.log(`Trying to connect to ${uri}`)
 mongoose.connect(uri)
   .then((stuff) => {
-    console.log(`Connection successful. Database version is ${stuff.version}`)
+    console.log(`Connection successful. Database Version =${stuff.version}`)
+
   })
   .catch((error) => console.log(error))
-  .finally((coisa) => { console.log('MongoDB Connection stablished') })
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
