@@ -27,13 +27,15 @@ const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
 
 
 // connect to the database server
-console.log(`Trying to connect to ${uri}`)
+console.log(`Trying to connect to MongoDB Cloud`)
 mongoose.connect(uri)
   .then((stuff) => {
     console.log(`Connection successful. Database Version =${stuff.version}`)
 
   })
-  .catch((error) => console.log(error))
+  .catch((error) => {
+    console.log(`Error connecting to ${MONGO_HOST}`)
+    console.log(error)})
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
