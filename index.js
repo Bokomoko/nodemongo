@@ -4,9 +4,8 @@ import dotenv from 'dotenv'
 
 dotenv.config() // loads the .env file into process.env
 
-
-// data models
-import Tomadores from './models/tomadores.js'
+// routers
+import tomadoresRouter from './routes/tomadoresRoutes.js'
 
 
 // constants
@@ -70,26 +69,8 @@ app.get("/",
 
   })
 
-// entry point to add data to the tomadores collection
-
-app.post('/tomadores', async (req, res) => {
-  // data from the client will be inside the body of the request
-  const tomador = { ...req.body }
-  if (!tomador.razaoSocial) {
-    res.status(400).json({ error: "razaoSocial is required" })
-    return
-  }
-
-  try {
-    const { _id } = await Tomadores.create(tomador) // result will contain the data just inserted plus the _ID     console.log({ result })
-    res.status(201).json({ _id })
-  }
-  catch (error) {
-    res.status(500).json({ error })
-  }
-
-
-})
+// setup the routes
+app.use('/tomadores', tomadoresRouter)
 
 // start the express server
 app.listen(PORT, () => {
