@@ -21,21 +21,22 @@ const PORT = 3000 // the port used by the express server
 const username = process.env.MONGO_INITDB_ROOT_USERNAME;
 const password = encodeURIComponent(process.env.MONGO_INITDB_ROOT_PASSWORD);
 const mongohost = process.env.MONGO_HOST;
+const mongodb = process.env.MONGO_INITDB_DATABASE;
 
 // this is the connection string that will be used to connect to the database server
-const uri = `mongodb+srv://${username}:${password}@${mongohost}`;
-
+const uri = `mongodb+srv://${username}:${password}@${mongohost}/${mongodb}?retryWrites=true&w=majority`;
 
 // connect to the database server
-console.log(`Trying to connect to MongoDB Cloud`)
+console.log(`Trying to connect to MongoDB Cloud database at ${mongohost}...`);
 mongoose.connect(uri)
   .then((stuff) => {
     console.log(`Connection successful. Database Version =${stuff.version}`)
 
   })
   .catch((error) => {
-    console.log(`Error connecting to ${MONGO_HOST}`)
-    console.log(error)})
+    console.log(`Error connecting to ${mongohost}: `)
+    console.log(error)
+  })
 // instantiate the app (web) server
 const app = express() // creates the express instance that will be used
 
@@ -71,18 +72,22 @@ app.get("/",
 
 // entry point to add data to the tomadores collection
 
-app.post('/tomadores', async (req, res)=> {
+app.post('/tomadores', async (req, res) => {
   // data from the client will be inside the body of the request
-  const person = { ... req.body }
+  const tomador = { ...req.body }
+  if (!tomador.razaoSocial) {
+    res.status(400).json({ error: "razaoSocial is required" })
+    return
+  }
+
   try {
-    const result = await Person.create(person)
-    console.log({result})
-    res.status(201).json( { id: result } )
+    const { _id } = await Tomadores.create(tomador) // result will contain the data just inserted plus the _ID     console.log({ result })
+    res.status(201).json({ _id })
   }
-  catch (error){
-    res.status(500).json({error})
+  catch (error) {
+    res.status(500).json({ error })
   }
-  
+
 
 })
 
