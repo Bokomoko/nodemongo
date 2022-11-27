@@ -69,6 +69,23 @@ app.get("/",
 
   })
 
+// entry point to add data to the tomadores collection
+
+app.post('/tomadores', async (req, res)=> {
+  // data from the client will be inside the body of the request
+  const person = { ... req.body }
+  try {
+    const result = await Person.create(person)
+    console.log({result})
+    res.status(201).json( { id: result } )
+  }
+  catch (error){
+    res.status(500).json({error})
+  }
+  
+
+})
+
 // start the express server
 app.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`)
