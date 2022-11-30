@@ -29,8 +29,9 @@ tomadoresRouter.post('/', async (req, res) => {
 // list all tomadores
 tomadoresRouter.get('/', async (req, res) => {
   try {
-    const tomadores = await Tomadores.find(). // this query will return an array of tomadores
-      res.status(200).json(tomadores)
+    console.log('list all tomadores')
+    const tomadores = await Tomadores.find() // this query will return an array of tomadores
+    res.status(200).json(tomadores)
   }
   catch (error) {
     res.status(500).json({ error })
